@@ -5,3 +5,4 @@
 /.classpath
 /.project
 /src/main/webapp/react-app/node_modules/
+/src/main/resources/static/js/bundle.js
