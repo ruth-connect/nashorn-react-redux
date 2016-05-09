@@ -1,4 +1,7 @@
+.idea
+*.iml
 /target/
 /.settings/
 /.classpath
 /.project
+/src/main/webapp/react-app/node_modules/
