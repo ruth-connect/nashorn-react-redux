@@ -9,11 +9,11 @@ public class SlideDeckController {
 
 	private static final Logger log = Logger.getLogger(SlideDeckController.class);
 	
-	@RequestMapping({"/", "/index.html"})
+	@RequestMapping({"/slides", "/index.html"})
     public String index() {
 		if(log.isInfoEnabled()) {
 			log.info("SlideDeckController index() invoked");
 		}
-        return "index";
+        return "index.html";
     }
 }
