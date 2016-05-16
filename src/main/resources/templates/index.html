@@ -22,7 +22,6 @@
 				
 		<!-- S5 JS -->
 		<script src="/ui/default/slides.js" type="text/javascript"></script>
-		
 	</head>
 	<body>
 		<div class="layout">
@@ -31,7 +30,7 @@
 			<div id="header"></div>
 			<div id="footer">
 				<h1>Server-Side React and Redux in Java 8</h1>
-				<h2>Using the Nashorn script engine within a Spring Boot web application</h2>
+				<h2>Using Nashorn to server render a React app</h2>
 			</div>
 		</div>
 		
@@ -39,31 +38,154 @@
 		
 			<div class="slide">
 				<h1>Server-Side React and Redux in Java 8</h1>
-				<h2>using the Nashorn script engine within a Spring Boot web application</h2>
+				<h2>Using the Nashorn script engine to server render a React app</h2>
 				<h3>Arran White and Ruth Mills</h3>
 				<h4>Connect Group</h4>
 			</div>
-						
+
 			<div class="slide">
-				<h1>Nashorn</h1>
+				<h1>Why JavaScript?</h1>
 				<ul>
-					<li>Runs Javascript natively on the JVM</li>
-					<li>Available out of the box as part of Java 8</li>
-					<li>Far better performance than the older Rhino JS engine</li>
-					<li>Can run from within a Java application or directly from the command line</li>
-					<li>Can execute Java code from within Javascript</li>
-					<li>So you can have Java code that calls Javascript that calls more Java code</li>
-				</ul>
-			</div>
-			
-			<div class="slide">
-				<h1>Further Resources</h1>
-				<ul>
-					<li><a href="https://github.com/pugnascotia/spring-react-boilerplate" target="_blank">Spring React Boilerplate</a> project on GitHub - a working example
-					which provided a lot of what we needed for this talk.</li>
+					<li>It is awesome & fun!</li>
+					<li>Modern web platform</li>
+					<li>Rich & interactive web applications</li>
+					<li>No longer only in the browser</li>
 				</ul>
 			</div>
 
+			<div class="slide">
+				<h1>Isomorphic JavaScript</h1>
+				<ul>
+					<li>Isomorphism: If you engage the same entity in two different contexts, you should get the same result.</li>
+					<li>Same code runs on the client and the server</li>
+					<li>Stay DRY -> Less code -> More maintainability -> Less bugs</li>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<h1>Server Rendering</h1>
+				<ul>
+					<li>Execute JavaScript on server to produce HTML</li>
+					<li>Send HTML to browser</li>
+					<li>Browser bootstraps application and uses HTML from server as initial state</li>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<h1>Server Rendering Benefits</h1>
+				<ul>
+					<li>Faster initial page load - especially with caching</li>
+					<li>SEO - (Google crawls & executes JS but others don't... yet!)</li>
+					<li>Can use user-agent header to render desktop/mobile layouts</li>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<h1>Don't want to move from Java? Options?</h1>
+				<ul>
+					<li>Call out to Node to execute JavaScript - more complex & slow</li>
+					<li>Nashorn!</li>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<h1>Nashorn</h1>
+				<h2>Evaluating JavaScript</h2>
+<pre><code>
+ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
+nashorn.eval("var foo = 'World!'; print('Hello', foo);");
+nashorn.eval(new FileReader("bundle.js"));
+</code></pre>
+			</div>
+
+			<div class="slide">
+				<h1>Nashorn</h1>
+				<h2>Passing Java value to JavaScript</h2>
+<pre><code>
+ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
+nashorn.eval("var callme = function(name) { return 'Hello ' + name; };");
+Invocable invocable = (Invocable) nashorn;
+String result = (String) invocable.invokeFunction("callme", "from Java!");
+System.out.println(result);
+</code></pre>
+			</div>
+
+			<div class="slide">
+				<h1>Nashorn</h1>
+				<h2>Access JavaScript object in Java</h2>
+<pre><code>
+ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
+nashorn.eval("var callme = function(name) { return 'Hello ' + name; };");
+
+// Create JavaScript object.
+nashorn.eval("var obj = new Object()");
+nashorn.eval("obj.greet = function(name) { print('Hello', name); };");
+
+// Get a handle on the JavaScript object here.
+Object obj = nashorn.get("obj");
+
+Invocable invocable = (Invocable) nashorn;
+invocable.invokeMethod(obj, "greet", "World!");
+</code></pre>
+			</div>
+
+			<div class="slide">
+				<h1>Nashorn</h1>
+				<h2>jjs</h2>
+				<p>jjs demo!</p>
+			</div>
+
+			<div class="slide">
+				<h1>Nashorn</h1>
+				<ul>
+					<li>Runs JavaScript natively on the JVM</li>
+					<li>Available out of the box as part of Java 8</li>
+					<li>Far better performance than the older Rhino JS engine</li>
+					<li>Can execute JS from the command line with `jjs`</li>
+					<li>Can execute JavaScript code from Java</li>
+					<li>Can execute Java code from JavaScript</li>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<h1>Nashorn</h1>
+				<ul>
+					<li>Fully supports ECMAScript 5.1 spec</li>
+					<li>ES6 is coming in Java 9... (we use babel anyway)</li>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<h1>Thread Safety</h1>
+				<ul>
+					<li>JavaScript is single threaded. Java is multithreaded.</li>
+					<li>JavaScript spec does not define multithreaded semantics</li>
+					<li>Making JS thread safe would kill JS performance...</li>
+					<li>...lots of locking, etc - nasty!</li>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<h1>Thread Safety</h1>
+				<ul>
+					<li>Best practices...</li>
+					<li>Use a ThreadLocal ScriptEngine instead of a single instance</li>
+					<li>Avoid sharing script objects where possible, use primitives or Java objects</li>
+					<li>JSON.stringify() and JSON.parse() to transport as Strings</li>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<h1>Demo</h1>
+				<p>Let's look at an example using React, Redux, etc.</p>
+			</div>
+
+			<div class="slide">
+				<h1>Further Resources</h1>
+				<ul>
+					<li><a href="https://github.com/arrwhidev/nashorn-webpack-react-redux-boilerplate" target="_blank">Boilerplate</a> project on GitHub - a working example based on everything we learned to get it working.</li>
+				</ul>
+			</div>
 		</div>
 	</body>
 </html>

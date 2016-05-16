@@ -29,6 +29,8 @@ public class ViewConfig {
         configurer.setEngineName("nashorn");
         configurer.setScripts(scripts);
         configurer.setRenderFunction("render");
+
+        // Nashorn is not thread safe -> this will use a ThreadLocal ScriptEngine.
         configurer.setSharedEngine(false);
         return configurer;
     }
