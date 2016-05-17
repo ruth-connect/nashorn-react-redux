@@ -128,6 +128,7 @@ nashorn.eval("var obj = new Object()");
 nashorn.eval("obj.greet = function(name) {" +
     " "print('Hello', name); };");
 </code></pre>
+				<h2>(continues on next slide)</h2>
 
 			</div>
 			
@@ -145,6 +146,11 @@ invocable.invokeMethod(obj, "greet", "World!");
 
 			<div class="slide">
 				<h1>JJS</h1>
+				<ul>
+					<li>JJS behaves like a REPL for JS running under Nashorn</li>
+					<li>Similar to how Node behaves as a REPL</li>
+					<li>You can also pass a JS file into JJS which will then be executed by Nashorn</li>
+				</ul>
 				<p>JJS Demo!</p>
 			</div>
 
