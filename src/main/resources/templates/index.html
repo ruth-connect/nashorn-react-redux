@@ -92,7 +92,8 @@
 				<h1>Nashorn</h1>
 				<h2>Evaluating JavaScript</h2>
 <pre><code>
-ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
+ScriptEngine nashorn =
+    new ScriptEngineManager().getEngineByName("nashorn");
 nashorn.eval("var foo = 'World!'; print('Hello', foo);");
 nashorn.eval(new FileReader("bundle.js"));
 </code></pre>
@@ -102,10 +103,13 @@ nashorn.eval(new FileReader("bundle.js"));
 				<h1>Nashorn</h1>
 				<h2>Passing Java value to JavaScript</h2>
 <pre><code>
-ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
-nashorn.eval("var callme = function(name) { return 'Hello ' + name; };");
+ScriptEngine nashorn =
+    new ScriptEngineManager().getEngineByName("nashorn");
+nashorn.eval("var callme = function(name) {" +
+    " return 'Hello ' + name; };");
 Invocable invocable = (Invocable) nashorn;
-String result = (String) invocable.invokeFunction("callme", "from Java!");
+String result = (String)
+    invocable.invokeFunction("callme", "from Java!");
 System.out.println(result);
 </code></pre>
 			</div>
@@ -114,13 +118,23 @@ System.out.println(result);
 				<h1>Nashorn</h1>
 				<h2>Access JavaScript object in Java</h2>
 <pre><code>
-ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
-nashorn.eval("var callme = function(name) { return 'Hello ' + name; };");
+ScriptEngine nashorn =
+    new ScriptEngineManager().getEngineByName("nashorn");
+nashorn.eval("var callme = function(name) {" +
+    " return 'Hello ' + name; };");
 
 // Create JavaScript object.
 nashorn.eval("var obj = new Object()");
-nashorn.eval("obj.greet = function(name) { print('Hello', name); };");
+nashorn.eval("obj.greet = function(name) {" +
+    " "print('Hello', name); };");
+</code></pre>
 
+			</div>
+			
+			<div class="slide">
+				<h1>Nashorn</h1>
+				<h2>Access JavaScript object in Java (continued)</h2>
+<pre><code>
 // Get a handle on the JavaScript object here.
 Object obj = nashorn.get("obj");
 
